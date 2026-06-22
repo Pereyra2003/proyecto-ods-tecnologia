@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://db.eohxnmlhmznqdwnmzlye.supabase.co:5432/postgres
+    username: postgres
+    password: Ramsescor2001.
+    driver-class-name: org.postgresql.Driver
+  
+  # 👇 AGREGA ESTAS LÍNEAS AQUÍ ABAJO:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+cloudinary:
+  cloud-name: 'dv1zxcgrf'
+  api-key: '655637866482169'
+  api-secret: 'uNJUOj2Hc1N2e5LbTBrXOQyp0dM'

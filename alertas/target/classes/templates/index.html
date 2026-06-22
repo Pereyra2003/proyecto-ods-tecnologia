@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Alertas Vecinales - Bajo Piura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            background-color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #0f172a;
+        }
+        /* Navbar de Cristal */
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+        /* Botón Reportar Animado */
+        .btn-pulse {
+            background: linear-gradient(135deg, #dc3545 0%, #b91c1c 100%);
+            border: none;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn-pulse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+        }
+        /* Filtros Modernos */
+        .filter-pill {
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            color: #64748b;
+            border: 1.5px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+        .filter-pill:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-pill.active {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            border-color: #0f172a !important;
+        }
+        /* Tarjetas de Incidentes Premium */
+        .premium-card-incident {
+            border-radius: 24px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            overflow: hidden;
+        }
+        .premium-card-incident:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+        }
+        /* Mini Contadores Superiores */
+        .mini-stat {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark glass-nav sticky-top shadow-sm py-3">
+        <div class="container justify-content-between px-3" style="max-width: 500px;">
+            <span class="navbar-brand mb-0 fw-extrabold tracking-tight d-flex align-items-center gap-2" style="font-weight: 800; font-size: 1.15rem;">
+                <span class="fs-4">🛡️</span> Alertas Bajo Piura
+            </span>
+            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 fw-bold" style="font-size: 0.72rem; border: 1px solid rgba(220,53,69,0.2);">
+                📡 EN VIVO (Supabase)
+            </span>
+        </div>
+    </nav>
+
+    <div class="container my-3" style="max-width: 500px;">
+        
+        <div th:if="${param.exito}" class="alert alert-success border-0 mb-3 p-3 shadow flex-row align-items-center d-flex animate-bounce" style="border-radius: 18px; background: #ecfdf5; border-left: 5px solid #10b981 !important;">
+            <i class="bi bi-shield-check-fill fs-3 text-success me-3"></i>
+            <div>
+                <strong class="text-slate-900 d-block" style="font-size:0.9rem;">¡Alerta Publicada!</strong>
+                <span class="text-secondary" style="font-size:0.8rem;">Sincronizada correctamente en internet.</span>
+            </div>
+            <button type="button" class="btn-close ms-auto structure-none" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="d-grid mb-4">
+            <a th:href="@{/reportes/nuevo}" class="btn btn-danger btn-pulse text-white fw-bold py-3.5 d-flex align-items-center justify-content-center gap-2" style="font-size: 1.05rem; font-weight:700;">
+                <i class="bi bi-plus-circle-fill fs-5"></i> REPORTAR NUEVO INCIDENTE
+            </a>
+        </div>
+
+        <div class="row g-2 mb-4">
+            <div class="col-4">
+                <div class="mini-stat">
+                    <span class="fs-4 d-block mb-0">🚨</span>
+                    <small class="text-muted d-block" style="font-size:0.68rem; font-weight:700;">DESBORDES</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mini-stat">
+                    <span class="fs-4 d-block mb-0">🚧</span>
+                    <small class="text-muted d-block" style="font-size:0.68rem; font-weight:700;">CANALES</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mini-stat">
+                    <span class="fs-4 d-block mb-0">🐛</span>
+                    <small class="text-muted d-block" style="font-size:0.68rem; font-weight:700;">PLAGAS</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="text-secondary fw-bold d-block mb-2 text-uppercase tracking-wider" style="font-size: 0.7rem;">Filtrar cuadrante:</label>
+            <div class="d-flex gap-2 overflow-x-auto pb-2" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <button class="btn filter-pill active px-4 py-2.5 rounded-pill shadow-sm" onclick="filtrarAlertas('TODOS')">Todas</button>
+                <button class="btn filter-pill px-3.5 py-2.5 rounded-pill shadow-sm" onclick="filtrarAlertas('DESBORDE')">🚨 Desbordes</button>
+                <button class="btn filter-pill px-3.5 py-2.5 rounded-pill shadow-sm" onclick="filtrarAlertas('CANAL_BLOQUEADO')">🚧 Canales</button>
+                <button class="btn filter-pill px-3.5 py-2.5 rounded-pill shadow-sm" onclick="filtrarAlertas('PLAGA')">🐛 Plagas</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+            <h6 class="mb-0 text-slate-900" style="font-weight: 700; font-size:0.95rem;">Alertas de Emergencia Activas</h6>
+            <span class="badge bg-slate-200 text-dark font-monospace rounded-pill px-2.5 py-1" th:text="${#lists.size(reportes)} + ' reportes'" style="background-color:#e2e8f0; font-size:0.75rem;">0 reportes</span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(reportes)}" class="card text-center shadow-sm py-5 border-0 bg-white" style="border-radius: 24px;">
+            <div class="card-body py-4">
+                <div class="bg-success bg-opacity-10 text-success d-inline-block rounded-circle p-3 mb-3">
+                    <i class="bi bi-shield-check fs-1"></i>
+                </div>
+                <h5 class="fw-bold text-slate-900 mb-1">Sin Novedades Críticas</h5>
+                <p class="text-muted small mb-0 px-4">No se registran amenazas climatológicas o agrícolas en este momento en el Bajo Piura.</p>
+            </div>
+        </div>
+
+        <div id="listaReportes">
+            <div th:each="reporte : ${reportes}" class="card premium-card-incident mb-4" th:data-tipo="${reporte.tipoIncidente}">
+                
+                <div class="p-3 pb-2 d-flex justify-content-between align-items-center bg-white border-0">
+                    <span class="badge px-3 py-2 rounded-pill fw-bold"
+                          th:classappend="${reporte.tipoIncidente == 'DESBORDE' ? 'bg-danger bg-opacity-10 text-danger' : (reporte.tipoIncidente == 'CANAL_BLOQUEADO' ? 'bg-warning bg-opacity-10 text-warning-dark text-dark' : 'bg-success bg-opacity-10 text-success')}"
+                          style="font-size: 0.75rem;">
+                        <i th:class="${reporte.tipoIncidente == 'DESBORDE' ? 'bi bi-water me-1' : (reporte.tipoIncidente == 'CANAL_BLOQUEADO' ? 'bi bi-cone-striped me-1' : 'bi bi-bug me-1')}"></i>
+                        <span th:text="${reporte.tipoIncidente == 'DESBORDE' ? 'Inundación / Desborde' : (reporte.tipoIncidente == 'CANAL_BLOQUEADO' ? 'Canal Obstruido' : 'Plaga detectada')}">TIPO</span>
+                    </span>
+                    <small class="text-muted font-monospace d-flex align-items-center gap-1" style="font-size: 0.72rem; font-weight:600;">
+                        <i class="bi bi-clock-history"></i>
+                        <span th:text="${#temporals.format(reporte.fechaCreacion, 'dd MMM - hh:mm a')}">Fecha</span>
+                    </small>
+                </div>
+                
+                <div class="bg-light w-100 overflow-hidden" th:if="${reporte.fotoUrl != null}" style="max-height: 250px;">
+                    <img th:src="${reporte.fotoUrl}" class="w-100 img-fluid" style="object-fit: cover; height: 250px;" alt="Evidencia Vecinal">
+                </div>
+
+                <div class="card-body p-3 pt-3">
+                    <h5 class="card-title fw-bold text-slate-900 mb-2 d-flex align-items-center gap-1.5" style="font-size: 1.05rem; font-weight:700;">
+                        <i class="bi bi-geo-alt-fill text-danger fs-5"></i>
+                        <span th:text="${reporte.comunidad}">Caserío Ejemplo</span>
+                    </h5>
+                    <p class="card-text text-secondary mb-3" style="font-size: 0.92rem; line-height: 1.5;" th:text="${reporte.descripcion}">Detalle de lo ocurrido...</p>
+                    
+                    <div class="pt-2 border-top border-light d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center fw-bold text-secondary" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <small class="text-muted" style="font-size: 0.8rem;">
+                                Por: <strong class="text-slate-800" th:text="${reporte.liderNombre}">Nombre Líder</strong>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filtrarAlertas(tipo) {
+            const botones = document.querySelectorAll('.filter-pill');
+            botones.forEach(btn => btn.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            
+            const tarjetas = document.querySelectorAll('.premium-card-incident');
+            tarjetas.forEach(card => {
+                if (tipo === 'TODOS' || card.getAttribute('data-tipo') === tipo) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
